@@ -1,0 +1,51 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "migrate": "node seed-data/migrate.mjs",
+    "start-graphql-server": "postgraphile -o --append-plugins postgraphile-plugin-connection-filter -c 'postgres://postgres:postgres@localhost/postgres' --watch --enhance-graphiql --dynamic-json",
+    "export-schema": "postgraphile -c 'postgres://postgres:postgres@localhost/postgres' --dynamic-json --export-schema-graphql schema.graphql",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "local-dev": "concurrently \"npm run docker-start-only-db\" \"wait-on tcp:5432 && npm run start-graphql-server\" \"npm run dev\"",
+    "docker-start": "docker-compose -f docker/docker-compose.yml up --build",
+    "docker-start-only-db": "docker-compose -f docker/docker-compose.yml up db",
+    "docker-down": "docker-compose -f docker/docker-compose.yml down",
+    "generate-readme-html": "npx marked -i README.md -o public/readme.html"
+  },
+  "author": "Vladimir Tasic",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-query": "^5.44.0",
+    "@tanstack/react-query-devtools": "^5.44.0",
+    "graphql-request": "^5.2.0",
+    "is-docker": "^3.0.0",
+    "next": "14.2.3",
+    "pg": "^8.12.0",
+    "postgraphile": "^4.13.0",
+    "postgraphile-plugin-connection-filter": "^2.3.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-virtuoso": "^4.7.11"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.43.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-virtualized": "^9.21.30",
+    "concurrently": "^8.2.2",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "marked": "^13.0.0",
+    "postcss": "^8",
+    "prettier": "^3.3.2",
+    "prettier-plugin-tailwindcss": "^0.6.3",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5",
+    "wait-on": "^7.2.0"
+  }
+}

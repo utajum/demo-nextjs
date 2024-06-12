@@ -1,0 +1,434 @@
+"""The root query type which gives access points into the data universe."""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  nodeId: ID!
+
+  """Fetches an object given its globally unique `ID`."""
+  node(
+    """The globally unique `ID`."""
+    nodeId: ID!
+  ): Node
+
+  """Reads and enables pagination through a set of `Document`."""
+  allDocuments(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Document`."""
+    orderBy: [DocumentsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: DocumentCondition
+  ): DocumentsConnection
+  documentById(id: Int!): Document
+
+  """Reads a single `Document` using its globally unique `ID`."""
+  document(
+    """The globally unique `ID` to be used in selecting a single `Document`."""
+    nodeId: ID!
+  ): Document
+}
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+}
+
+"""A connection to a list of `Document` values."""
+type DocumentsConnection {
+  """A list of `Document` objects."""
+  nodes: [Document]!
+
+  """
+  A list of edges which contains the `Document` and cursor to aid in pagination.
+  """
+  edges: [DocumentsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Document` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Document implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: Int!
+  title: String
+  issuedYear: Int
+  webLink: String
+  downloadLink: String
+  organization: String
+  topic: String
+  status: String
+  openForComment: Boolean
+  summary: String
+  assignedCategories: [String]
+  assignedTopics: [String]
+  assignedSubTopics: [String]
+  assignedScore: Int
+}
+
+"""A `Document` edge in the connection."""
+type DocumentsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Document` at the end of the edge."""
+  node: Document
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""Methods to use when ordering `Document`."""
+enum DocumentsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  TITLE_ASC
+  TITLE_DESC
+  ISSUED_YEAR_ASC
+  ISSUED_YEAR_DESC
+  WEB_LINK_ASC
+  WEB_LINK_DESC
+  DOWNLOAD_LINK_ASC
+  DOWNLOAD_LINK_DESC
+  ORGANIZATION_ASC
+  ORGANIZATION_DESC
+  TOPIC_ASC
+  TOPIC_DESC
+  STATUS_ASC
+  STATUS_DESC
+  OPEN_FOR_COMMENT_ASC
+  OPEN_FOR_COMMENT_DESC
+  SUMMARY_ASC
+  SUMMARY_DESC
+  ASSIGNED_CATEGORIES_ASC
+  ASSIGNED_CATEGORIES_DESC
+  ASSIGNED_TOPICS_ASC
+  ASSIGNED_TOPICS_DESC
+  ASSIGNED_SUB_TOPICS_ASC
+  ASSIGNED_SUB_TOPICS_DESC
+  ASSIGNED_SCORE_ASC
+  ASSIGNED_SCORE_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Document` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input DocumentCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: Int
+
+  """Checks for equality with the object’s `title` field."""
+  title: String
+
+  """Checks for equality with the object’s `issuedYear` field."""
+  issuedYear: Int
+
+  """Checks for equality with the object’s `webLink` field."""
+  webLink: String
+
+  """Checks for equality with the object’s `downloadLink` field."""
+  downloadLink: String
+
+  """Checks for equality with the object’s `organization` field."""
+  organization: String
+
+  """Checks for equality with the object’s `topic` field."""
+  topic: String
+
+  """Checks for equality with the object’s `status` field."""
+  status: String
+
+  """Checks for equality with the object’s `openForComment` field."""
+  openForComment: Boolean
+
+  """Checks for equality with the object’s `summary` field."""
+  summary: String
+
+  """Checks for equality with the object’s `assignedCategories` field."""
+  assignedCategories: [String]
+
+  """Checks for equality with the object’s `assignedTopics` field."""
+  assignedTopics: [String]
+
+  """Checks for equality with the object’s `assignedSubTopics` field."""
+  assignedSubTopics: [String]
+
+  """Checks for equality with the object’s `assignedScore` field."""
+  assignedScore: Int
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """Creates a single `Document`."""
+  createDocument(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDocumentInput!
+  ): CreateDocumentPayload
+
+  """Updates a single `Document` using its globally unique id and a patch."""
+  updateDocument(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDocumentInput!
+  ): UpdateDocumentPayload
+
+  """Updates a single `Document` using a unique key and a patch."""
+  updateDocumentById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDocumentByIdInput!
+  ): UpdateDocumentPayload
+
+  """Deletes a single `Document` using its globally unique id."""
+  deleteDocument(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDocumentInput!
+  ): DeleteDocumentPayload
+
+  """Deletes a single `Document` using a unique key."""
+  deleteDocumentById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDocumentByIdInput!
+  ): DeleteDocumentPayload
+}
+
+"""The output of our create `Document` mutation."""
+type CreateDocumentPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Document` that was created by this mutation."""
+  document: Document
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Document`. May be used by Relay 1."""
+  documentEdge(
+    """The method to use when ordering `Document`."""
+    orderBy: [DocumentsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DocumentsEdge
+}
+
+"""All input for the create `Document` mutation."""
+input CreateDocumentInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Document` to be created by this mutation."""
+  document: DocumentInput!
+}
+
+"""An input for mutations affecting `Document`"""
+input DocumentInput {
+  id: Int
+  title: String
+  issuedYear: Int
+  webLink: String
+  downloadLink: String
+  organization: String
+  topic: String
+  status: String
+  openForComment: Boolean
+  summary: String
+  assignedCategories: [String]
+  assignedTopics: [String]
+  assignedSubTopics: [String]
+  assignedScore: Int
+}
+
+"""The output of our update `Document` mutation."""
+type UpdateDocumentPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Document` that was updated by this mutation."""
+  document: Document
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Document`. May be used by Relay 1."""
+  documentEdge(
+    """The method to use when ordering `Document`."""
+    orderBy: [DocumentsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DocumentsEdge
+}
+
+"""All input for the `updateDocument` mutation."""
+input UpdateDocumentInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Document` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Document` being updated.
+  """
+  documentPatch: DocumentPatch!
+}
+
+"""
+Represents an update to a `Document`. Fields that are set will be updated.
+"""
+input DocumentPatch {
+  id: Int
+  title: String
+  issuedYear: Int
+  webLink: String
+  downloadLink: String
+  organization: String
+  topic: String
+  status: String
+  openForComment: Boolean
+  summary: String
+  assignedCategories: [String]
+  assignedTopics: [String]
+  assignedSubTopics: [String]
+  assignedScore: Int
+}
+
+"""All input for the `updateDocumentById` mutation."""
+input UpdateDocumentByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Document` being updated.
+  """
+  documentPatch: DocumentPatch!
+  id: Int!
+}
+
+"""The output of our delete `Document` mutation."""
+type DeleteDocumentPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Document` that was deleted by this mutation."""
+  document: Document
+  deletedDocumentId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Document`. May be used by Relay 1."""
+  documentEdge(
+    """The method to use when ordering `Document`."""
+    orderBy: [DocumentsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DocumentsEdge
+}
+
+"""All input for the `deleteDocument` mutation."""
+input DeleteDocumentInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Document` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteDocumentById` mutation."""
+input DeleteDocumentByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: Int!
+}

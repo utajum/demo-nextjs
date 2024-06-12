@@ -1,0 +1,105 @@
+<h2>Project Overview 📚</h2>
+<p>This project is a web application that displays data in a grid format. It uses Next.js for the frontend, GraphQL for the API, and Postgres for the database. The application is containerized using Docker.</p>
+<h2>Approach 🚀</h2>
+<p>Due to the problems in multiple designs and design inconsistencies, I decided to implement the design that was included in the email as an image and in the PDF as well. For more information, please refer to the <a href="https://github.com/utajum/demo-nextjs/blob/master/public/differences.pdf">differences.pdf</a> file.</p>
+<h2>Development Strategy 📝</h2>
+<p>The development of this project was executed in a systematic and well-planned manner. The project was divided into distinct stages, each focusing on a specific aspect of the application. This approach ensured that each part of the application was built and tested individually before integrating them together.</p>
+<ol>
+<li><p><strong>Seed Data and Docker Configuration:</strong> The project initiation involved the configuration of Docker and the establishment of the Postgres database. I then focused on seed data, writing scripts located in the <code>seed-data</code> directory to populate the database. This preliminary setup served as the groundwork for the subsequent stages of the project.</p>
+</li>
+<li><p><strong>Docker and Postgraphile Integration:</strong> The next stage involved integrating Postgraphile with Docker. Postgraphile, a tool I chose for its ease of use and robust API, was used to automatically generate a highly performant GraphQL API from the Postgres database. This integration involved creating a Docker service for the GraphQL server in the <code>docker-compose.yml</code> file. For more information on Postgraphile, you can refer to its <a href="https://www.graphile.org/postgraphile/introduction/">documentation</a>.</p>
+</li>
+<li><p><strong>Environment-Based Logic:</strong> To enhance the developer experience, I used the <code>is-docker</code> npm package. This package allows the application to modify its behavior based on the current environment.</p>
+</li>
+<li><p><strong>Frontend Implementation:</strong> This phase was dedicated to establishing the frontend architecture. The <code>src/app</code> directory holds the primary application code, while layout components (<code>layout.tsx</code>, <code>DefaultLayout.tsx</code>), and CSS styles (<code>style.css</code> and <code>satoshi.css</code>) are located in the <code>src/components</code> directory. The <code>src/components/Grid</code> directory includes several components for grid functionality, such as <code>GridComponent.tsx</code>, <code>TableRow.tsx</code>, <code>DocumentNode.ts</code>, and <code>Icons.tsx</code>. Tailwind CSS was customized for this project. For data fetching and caching, <code>@tanstack/react-query</code> was used, but due to the complexity of the SSR setup, the &#39;use client&#39; directive was used to save time. It is a demo after all. For data visualization in a table, I used <code>react-virtuoso</code>.</p>
+</li>
+<li><p><strong>Documentation:</strong> The final stage of the project was dedicated to creating comprehensive documentation. This included detailed explanations of the codebase, usage instructions, and troubleshooting guides. The documentation was written in a clear and concise manner.</p>
+</li>
+</ol>
+<h2>Technology Stack 💻</h2>
+<ul>
+<li><strong>Frontend:</strong> Next.js, React, Tailwind CSS</li>
+<li><strong>API:</strong> GraphQL - Postgraphile</li>
+<li><strong>Database:</strong> Postgres</li>
+<li><strong>Containerization:</strong> Docker</li>
+<li><strong>Data Fetching:</strong> React Query</li>
+<li><strong>Data Visualization:</strong> React Virtuoso</li>
+</ul>
+<h2>Database Setup 🗄️</h2>
+<p>The project uses a Postgres database, which is set up using scripts found in the <code>seed-data</code> directory. The <code>migrate.mjs</code> script connects to the database and calls the <code>createTable</code> and <code>loadData</code> functions to create the necessary tables and populate them with seed data.</p>
+<p>To manually seed the database run:</p>
+<pre><code class="language-bash">npm run docker-start-only-db
+npm run migrate
+</code></pre>
+<h2>Operating System Compatibility 🖥️</h2>
+<p>This project has been tested only on Linux 🐧. While it may work on other operating systems, I cannot guarantee full compatibility.</p>
+<h2>Local Development 🛠️</h2>
+<p>Follow these steps to set up the project for local development:</p>
+<ol>
+<li><p><strong>Clone the repository to your local machine.</strong> 📋</p>
+<pre><code class="language-bash">git clone https://github.com/utajum/demo-nextjs
+</code></pre>
+</li>
+<li><p><strong>Navigate to the project directory.</strong> 📁</p>
+<pre><code class="language-bash">cd demo-nextjs
+</code></pre>
+</li>
+<li><p><strong>Install the project dependencies.</strong> 📦</p>
+<pre><code class="language-bash">npm install
+</code></pre>
+</li>
+<li><p><strong>Start the local development server.</strong> 🚀</p>
+<pre><code class="language-bash">npm run local-dev
+</code></pre>
+<p>The <code>npm run local-dev</code> command concurrently starts the following services:</p>
+<ul>
+<li>🐘 <strong>Postgres database</strong> in Docker</li>
+<li>⚛️ <strong>GraphQL server</strong></li>
+<li>🌐 <strong>Next.js development server</strong></li>
+</ul>
+<p>Once started, the application will be accessible at <a href="http://localhost:3000">http://localhost:3000</a>.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> You need to seed the database once using the <code>npm run migrate</code> command.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note:</strong> You need to have Docker installed and running on your machine to use the <code>npm run local-dev</code> command.</p>
+</blockquote>
+<h3>Services URLs:</h3>
+<ul>
+<li><strong>Main Application:</strong> <a href="http://localhost:3000">http://localhost:3000</a></li>
+<li><strong>GraphiQL GUI/IDE:</strong> <a href="http://localhost:5000/graphiql">http://localhost:5000/graphiql</a></li>
+</ul>
+<h2>Docker Deployment 🐳</h2>
+<p>This application can be run using Docker, which ensures that it works in the same way across all environments. Follow these steps to run the application using Docker:</p>
+<pre><code class="language-bash">npm run docker-start
+</code></pre>
+<p>This will run:</p>
+<ul>
+<li>🐘 <strong>Postgres database</strong> in Docker</li>
+<li>⚛️ <strong>GraphQL server</strong> in Docker</li>
+<li>🌐 <strong>Next.js production build server</strong> in Docker</li>
+</ul>
+<h3>Services URLs:</h3>
+<ul>
+<li><strong>Main Application:</strong> <a href="http://localhost:4000">http://localhost:4000</a></li>
+<li><strong>GraphiQL GUI/IDE:</strong> <a href="http://localhost:5000/graphiql">http://localhost:5000/graphiql</a></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> You need to have Docker installed and running on your machine to use these commands.</p>
+</blockquote>
+<h2>Troubleshooting 🛠️</h2>
+<p>If you encounter issues when trying to run the application with Docker, you can try the following steps:</p>
+<ol>
+<li><p><strong>Stop all Docker containers.</strong> 🛑</p>
+<pre><code class="language-bash">npm run docker-down
+</code></pre>
+<p>This command will stop and remove all Docker containers defined in the <code>docker/docker-compose.yml</code> file.</p>
+</li>
+<li><p><strong>Start the application again.</strong> 🔄</p>
+<pre><code class="language-bash">npm run docker-start
+</code></pre>
+</li>
+</ol>
+<p>If you continue to experience issues, please check the Docker documentation or the application&#39;s issue tracker for potential solutions. If that does not help, consider hiring me to fix your problems.</p>
