@@ -1,3 +1,7 @@
+## Live Demo 🌐
+
+You can access the live demo of the project at [risklick-vladimir.onthewifi.com](https://risklick-vladimir.onthewifi.com/).
+
 ## Project Overview 📚
 
 This project is a web application that displays data in a grid format. It uses Next.js for the frontend, GraphQL for the API, and Postgres for the database. The application is containerized using Docker.
